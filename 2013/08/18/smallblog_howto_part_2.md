@@ -63,6 +63,7 @@ Hardly as clean as a `if(max_posts--)`, but not every language can be C. With ou
 
 I'll explain those two regexes for everyone. The first one in the header, `head -n1 $1 | sed 's/^#* //'` grabs the first line of your markdown post, and strips the pound signs off of it, leaving you with the plain title for your link text. The second one, `stat -c %y ${post} | sed 's/\..* / /'` grabs the last modified timestamp from [`stat(1)`](http://linux.die.net/man/1/stat) and strips off the miliseconds from the time, giving us a nice time and dateto put on the post. For those of you who aren't interested in including the timezone on the post, you can pipe it through an additional regex to strip that bit off, such as ` | sed 's/ [+-].*$//'`.
 
+## Portability?
 A few of you that have been following along are now scratching your heads; that last example is giving me an error. Why did this happen, there haven't been any typos in the post so far? A few of you may have even checked the [code](https://github.com/abyxcos/smallblog/blob/5f4c320f1d96226239271db5092e038948a4c18b/smallblog#L57). Congratulations, you are most likely the owner of a Macbook. If you're more lucky, you may even be running [OpenBSD](http://www.openbsd.org/). But the most likely cause of this is that you are running a BSD userland. One of the better things Apple has done for the world is include a BSD userland with their operating system (based on FreeBSD, but with a GNU toolchain.) This has caused a large amount of pain to many Linux developers, as they've now realized that their portable unix software isn't really that portable at all. In fact, most of it's highly Linux specific. This isn't entirely their fault, the GNU foundation has been pushing the GNU is not Unix motto for a bit, and many GNU and Linux tools have diverged a bit from the standards, for better or worse. This leads to such things as the wildly different `stat(1)` options you are now seeing. The man pages listing the options of each `stat(1)` as follows:
 
 * [Linux](http://linux.die.net/man/1/stat)
@@ -70,3 +71,41 @@ A few of you that have been following along are now scratching your heads; that 
 * [OpenBSD](http://www.openbsd.org/cgi-bin/man.cgi?query=stat&sektion=1)
 
 As you can see, OSX uses the BSD version of `stat(1)`, both of which differ from the current Linux implementation. I am currently developing on a Linux computer, so I didn't notice this right away (I'm not a heavy user of `stat(1)`,) but I felt it made for a good example. Another highly divergent utility is `ls(1)`. But now, for all of you BSD folks, the `stat(1)` line you're looking for is `stat -f "%Y-%m-%d %H:%M:%S %z" "${post}"`. This is included in the latest version of [smallblog](https://github.com/abyxcos/smallblog) so you can switch out the Linux line for the BSD line as required. I'm currently looking for a more portable method of finding the file modification time. If you know a good one, send over a pull request.
+
+## And now we return to your original programming
+Now that we're all portable, let's get back to the original problem we set aside; how can people find all our old posts? The few newest ones will show up on the main page, but we need some method to index them so we can go back to older articles. Well, MVP to the rescue.
+
+    $ head smallblog
+    make_archive(){
+        for post in `ls -r */*/*/*.md`; do
+            echo "<li><span>${time}</span> &raquo;
+                <a href=\"/blog/$1.html\">$2</a></li>"
+        done
+    }
+
+We can use the same exact trick we used for the post title to pass a title to `make_archive`. Now we can just drop this right after the main loop like so:
+
+    $ tail smallblog
+    make_archive "${post}" "`head -n1 "${post}" | sed 's/#* //'`" > archive.html
+
+Now, all we need to do is link this new page to the main page.
+
+## To top it all off
+Wait a minute, wasn't our main page a bit... lacking? In fact, I don't even think it's valid html. I recall learning something about a `<head>` and `<body>` tag in school...
+
+Turns out this is really easy to fix. All we need to do is `echo` a bit of html before and after our for loop. If you're also using the [jekyll theme](https://github.com/mojombo/jekyll/blob/master/lib/site_template/css/main.css), this bit of html is really easy.
+
+    blog_header="
+        <html><body><div class=\"site\">
+        <div class=\"header\">
+            <h1 class=\"title\"><a href=\"/blog\">mnetic.ch/blog</a></h1>
+            <a class=\"extra\" href=\"/blog/archive.html\">all posts</a>
+        </div>"
+    blog_footer="</div></body></html>"
+
+As a bonus, by using variables instead of `echo` here, we can `echo` these variables in front of the line that generates the individual files, allowing one to make their way back to our home page from a post, with no effort on our part, or theirs.
+
+## Where to next?
+We've picked off most of the easy code clean-ups now, but there's still plenty to go. In fact, that last bit of `echo`ing left us with two lines of code duplication that we can definitely factor out. And we haven't even found an elegant way to split up our post archive by months, rather than one ever-growing list. But, we did it. We now have a perfectly working blog, and no more excuses to not write while we hack away at it. So happy writing, and godspeed.
+
+The code up to here roughly corresponds to [this](https://github.com/abyxcos/smallblog/blob/4bc0b609f963f0a7f754716720d6ff0d4b25fc7a/smallblog) commit in smallblog. All of the code in the examples is free to use, you may hack it up in any way you want. The full [program](https://github.com/abyxcos/smallblog) is released under the [ISC license](https://github.com/abyxcos/smallblog/blob/master/LICENSE), so feel free to fork it, use it as is, or send patches back my way. My next goals with smallblog are to round of BSD compatibility, and work out some way to add and sort posts by tags without any server side scripting (symlinks are looking mighty good here.) These will be covered in [part 3](#).

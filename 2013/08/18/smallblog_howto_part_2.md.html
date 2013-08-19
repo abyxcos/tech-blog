@@ -17,7 +17,7 @@
 <h2 class="title"><a href='/blog/2013/08/18/smallblog_howto_part_2.md.html'>
 		How to create a static blog in shell (part 2)
 		</a></h2>
-		<p class="meta">Date: 2013-08-19 00:18:20 +0000</p>
+		<p class="meta">Date: 2013-08-19 01:00:50 +0000</p>
 		<div class="post">
 <p>Continued from <a href="http://mnetic.ch/blog/2013/08/17/smallblog_howto.md.html">part 1</a>.</p>
 
@@ -88,6 +88,8 @@ done
 
 <p>I&rsquo;ll explain those two regexes for everyone. The first one in the header, <code>head -n1 $1 | sed 's/^#* //'</code> grabs the first line of your markdown post, and strips the pound signs off of it, leaving you with the plain title for your link text. The second one, <code>stat -c %y ${post} | sed 's/\..* / /'</code> grabs the last modified timestamp from <a href="http://linux.die.net/man/1/stat"><code>stat(1)</code></a> and strips off the miliseconds from the time, giving us a nice time and dateto put on the post. For those of you who aren&rsquo;t interested in including the timezone on the post, you can pipe it through an additional regex to strip that bit off, such as <code>| sed 's/ [+-].*$//'</code>.</p>
 
+<h2>Portability?</h2>
+
 <p>A few of you that have been following along are now scratching your heads; that last example is giving me an error. Why did this happen, there haven&rsquo;t been any typos in the post so far? A few of you may have even checked the <a href="https://github.com/abyxcos/smallblog/blob/5f4c320f1d96226239271db5092e038948a4c18b/smallblog#L57">code</a>. Congratulations, you are most likely the owner of a Macbook. If you&rsquo;re more lucky, you may even be running <a href="http://www.openbsd.org/">OpenBSD</a>. But the most likely cause of this is that you are running a BSD userland. One of the better things Apple has done for the world is include a BSD userland with their operating system (based on FreeBSD, but with a GNU toolchain.) This has caused a large amount of pain to many Linux developers, as they&rsquo;ve now realized that their portable unix software isn&rsquo;t really that portable at all. In fact, most of it&rsquo;s highly Linux specific. This isn&rsquo;t entirely their fault, the GNU foundation has been pushing the GNU is not Unix motto for a bit, and many GNU and Linux tools have diverged a bit from the standards, for better or worse. This leads to such things as the wildly different <code>stat(1)</code> options you are now seeing. The man pages listing the options of each <code>stat(1)</code> as follows:</p>
 
 <ul>
@@ -98,6 +100,50 @@ done
 
 
 <p>As you can see, OSX uses the BSD version of <code>stat(1)</code>, both of which differ from the current Linux implementation. I am currently developing on a Linux computer, so I didn&rsquo;t notice this right away (I&rsquo;m not a heavy user of <code>stat(1)</code>,) but I felt it made for a good example. Another highly divergent utility is <code>ls(1)</code>. But now, for all of you BSD folks, the <code>stat(1)</code> line you&rsquo;re looking for is <code>stat -f "%Y-%m-%d %H:%M:%S %z" "${post}"</code>. This is included in the latest version of <a href="https://github.com/abyxcos/smallblog">smallblog</a> so you can switch out the Linux line for the BSD line as required. I&rsquo;m currently looking for a more portable method of finding the file modification time. If you know a good one, send over a pull request.</p>
+
+<h2>And now we return to your original programming</h2>
+
+<p>Now that we&rsquo;re all portable, let&rsquo;s get back to the original problem we set aside; how can people find all our old posts? The few newest ones will show up on the main page, but we need some method to index them so we can go back to older articles. Well, MVP to the rescue.</p>
+
+<pre><code>$ head smallblog
+make_archive(){
+    for post in `ls -r */*/*/*.md`; do
+        echo "&lt;li&gt;&lt;span&gt;${time}&lt;/span&gt; &amp;raquo;
+            &lt;a href=\"/blog/$1.html\"&gt;$2&lt;/a&gt;&lt;/li&gt;"
+    done
+}
+</code></pre>
+
+<p>We can use the same exact trick we used for the post title to pass a title to <code>make_archive</code>. Now we can just drop this right after the main loop like so:</p>
+
+<pre><code>$ tail smallblog
+make_archive "${post}" "`head -n1 "${post}" | sed 's/#* //'`" &gt; archive.html
+</code></pre>
+
+<p>Now, all we need to do is link this new page to the main page.</p>
+
+<h2>To top it all off</h2>
+
+<p>Wait a minute, wasn&rsquo;t our main page a bit&hellip; lacking? In fact, I don&rsquo;t even think it&rsquo;s valid html. I recall learning something about a <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code> tag in school&hellip;</p>
+
+<p>Turns out this is really easy to fix. All we need to do is <code>echo</code> a bit of html before and after our for loop. If you&rsquo;re also using the <a href="https://github.com/mojombo/jekyll/blob/master/lib/site_template/css/main.css">jekyll theme</a>, this bit of html is really easy.</p>
+
+<pre><code>blog_header="
+    &lt;html&gt;&lt;body&gt;&lt;div class=\"site\"&gt;
+    &lt;div class=\"header\"&gt;
+        &lt;h1 class=\"title\"&gt;&lt;a href=\"/blog\"&gt;mnetic.ch/blog&lt;/a&gt;&lt;/h1&gt;
+        &lt;a class=\"extra\" href=\"/blog/archive.html\"&gt;all posts&lt;/a&gt;
+    &lt;/div&gt;"
+blog_footer="&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"
+</code></pre>
+
+<p>As a bonus, by using variables instead of <code>echo</code> here, we can <code>echo</code> these variables in front of the line that generates the individual files, allowing one to make their way back to our home page from a post, with no effort on our part, or theirs.</p>
+
+<h2>Where to next?</h2>
+
+<p>We&rsquo;ve picked off most of the easy code clean-ups now, but there&rsquo;s still plenty to go. In fact, that last bit of <code>echo</code>ing left us with two lines of code duplication that we can definitely factor out. And we haven&rsquo;t even found an elegant way to split up our post archive by months, rather than one ever-growing list. But, we did it. We now have a perfectly working blog, and no more excuses to not write while we hack away at it. So happy writing, and godspeed.</p>
+
+<p>The code up to here roughly corresponds to <a href="https://github.com/abyxcos/smallblog/blob/4bc0b609f963f0a7f754716720d6ff0d4b25fc7a/smallblog">this</a> commit in smallblog. All of the code in the examples is free to use, you may hack it up in any way you want. The full <a href="https://github.com/abyxcos/smallblog">program</a> is released under the <a href="https://github.com/abyxcos/smallblog/blob/master/LICENSE">ISC license</a>, so feel free to fork it, use it as is, or send patches back my way. My next goals with smallblog are to round of BSD compatibility, and work out some way to add and sort posts by tags without any server side scripting (symlinks are looking mighty good here.) These will be covered in <a href="#">part 3</a>.</p>
 </div>
 
 			</div>
