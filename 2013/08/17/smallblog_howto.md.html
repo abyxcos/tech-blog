@@ -15,12 +15,11 @@
 				</div>
 
 <h2 class="title"><a href='/blog/2013/08/17/smallblog_howto.md.html'>
-	How to create a static blog in shell (part 1)
-</a></h2>
-<p class="meta">Date: 2013-08-18 00:40:46 +0000</p>
-<div class="post">
-
-<p>This is a short description of the process I went about to create <a href="https://github.com/abyxcos/smallblog">smallblog</a>. If you&rsquo;re reading this, you&rsquo;ve most likely heard of <a href="http://jekyllrb.com/">jekyll</a>. If you haven&rsquo;t heard of jekyll, it&rsquo;s a small ruby script to create a static set of pages out of markdown files, and link them all together with a simple index. No server-side language, so it&rsquo;s both <a href="http://nginx.org/">nginx</a> friendly, and Hacker News friendly. No more worries about caching plugins, or if your database is optimized for traffic. And no chance of updates breaking your site. Of course the downside is you must regenerate your whole blog every time you update a post.</p>
+		How to create a static blog in shell (part 1)
+		</a></h2>
+		<p class="meta">Date: 2013-08-18 19:49:37 +0000</p>
+		<div class="post">
+<p>This is a short description of the process I went about to create <a href="https://github.com/abyxcos/smallblog">smallblog</a>. If you&rsquo;re reading this, you&rsquo;ve most likely heard of <a href="http://jekyllrb.com/">jekyll</a>. If you haven&rsquo;t heard of jekyll, it&rsquo;s a small ruby script to create a static set of pages out of markdown files, and link them all together with a simple index. No server-side language, so it&rsquo;s both <a href="http://nginx.org/">nginx</a> friendly, and <a href="https://news.ycombinator.com/">Hacker News</a> friendly. No more worries about caching plugins, or if your database is optimized for traffic. And no chance of updates breaking your site. Of course the downside is you must regenerate your whole blog every time you update a post.</p>
 
 <p>As you&rsquo;re still here, you probably weren&rsquo;t interested in adding ruby to your setup for jekyll, and none of the python counterparts interested you. Or you found an engine you liked, but the theme was downright depressing. And now you&rsquo;ve decided to make your own, but you&rsquo;re not sure where to start. Well, let me help you out.</p>
 
@@ -39,7 +38,7 @@ markdown */*/*/*.md &gt; index.html
 <p>Seems easy enough. Now let&rsquo;s expand it a bit. We can store markdown files for each post in <code>year/month/day/</code>, and iterate over them. But it would be really nice if we had some way to visually separate posts, instead of just scanning the page for h1s. Let&rsquo;s spit out a header before each post so we can have a title, and even a date string.</p>
 
 <pre><code>$ cat smallblog
-for post `ls -r */*/*/*.md`; do
+for post in `ls -r */*/*/*.md`; do
     echo "&lt;p&gt;&lt;div class=\"post\"&gt;" &gt;&gt; index.html
     markdown "${post}" &gt;&gt; index.html
     echo "&lt;/div&gt;&lt;/p&gt;" &gt;&gt; index.html
@@ -52,8 +51,9 @@ done
 
 <p>Congratulations, we now have a serviceable blog. As we let the dust settle, now we realize that we&rsquo;re lacking any means of navigation beyond scrolling through the latest set of articles on the main page. So we need some kind of index of all the posts in the blog. As seen, we can easily generate a list of files with <code>ls</code>, and we can exploit our datefull directory structure to easily split up posts by month, or even year.</p>
 
-<p>Also, a few of you may have noticed, this script isn&rsquo;t terribly portable. In particular, the way we use <code>stat(1)</code> to include the date in the posts only works on linux. Another problem that commonly crops up is the reliance on <code>/bin/bash</code> to create portable shell scripts. Smallblog was developed under pdksh, and executes under <code>/bin/sh</code>, so many of the common bash-isms that can creep into shell scripts have been avoided (you may notice the use of <code>expr</code> rather than <code>let</code> for the inline math.) We&rsquo;ll discuss this more in <a href="#">part 2</a>.</p>
+<p>Also, a few of you may have noticed, this script isn&rsquo;t terribly portable. In particular, the way we use <code>stat(1)</code> to include the date in the posts only works on linux. Another problem that commonly crops up is the reliance on <code>/bin/bash</code> to create portable shell scripts. Smallblog was developed under pdksh, and executes under <code>/bin/sh</code>, so many of the common bash-isms that can creep into shell scripts have been avoided (you may notice the use of <code>expr</code> rather than <code>let</code> for the inline math.) We&rsquo;ll discuss this more in <a href="http://mnetic.ch/blog/2013/08/18/smallblog_howto_part_2.md.html">part 2</a>.</p>
 </div>
+
 			</div>
 		</div>
 	</body>

@@ -1,5 +1,5 @@
 # How to create a static blog in shell (part 1)
-This is a short description of the process I went about to create [smallblog](https://github.com/abyxcos/smallblog). If you're reading this, you've most likely heard of [jekyll](http://jekyllrb.com/). If you haven't heard of jekyll, it's a small ruby script to create a static set of pages out of markdown files, and link them all together with a simple index. No server-side language, so it's both [nginx](http://nginx.org/) friendly, and Hacker News friendly. No more worries about caching plugins, or if your database is optimized for traffic. And no chance of updates breaking your site. Of course the downside is you must regenerate your whole blog every time you update a post.
+This is a short description of the process I went about to create [smallblog](https://github.com/abyxcos/smallblog). If you're reading this, you've most likely heard of [jekyll](http://jekyllrb.com/). If you haven't heard of jekyll, it's a small ruby script to create a static set of pages out of markdown files, and link them all together with a simple index. No server-side language, so it's both [nginx](http://nginx.org/) friendly, and [Hacker News](https://news.ycombinator.com/) friendly. No more worries about caching plugins, or if your database is optimized for traffic. And no chance of updates breaking your site. Of course the downside is you must regenerate your whole blog every time you update a post.
 
 As you're still here, you probably weren't interested in adding ruby to your setup for jekyll, and none of the python counterparts interested you. Or you found an engine you liked, but the theme was downright depressing. And now you've decided to make your own, but you're not sure where to start. Well, let me help you out.
 
@@ -15,7 +15,7 @@ See, picking a theme is so easy that you already forgot you didn't have a script
 Seems easy enough. Now let's expand it a bit. We can store markdown files for each post in `year/month/day/`, and iterate over them. But it would be really nice if we had some way to visually separate posts, instead of just scanning the page for h1s. Let's spit out a header before each post so we can have a title, and even a date string.
 
     $ cat smallblog
-    for post `ls -r */*/*/*.md`; do
+    for post in `ls -r */*/*/*.md`; do
         echo "<p><div class=\"post\">" >> index.html
         markdown "${post}" >> index.html
         echo "</div></p>" >> index.html
@@ -26,4 +26,4 @@ Hardly the most pretty script, but it's starting to look quite like a blog. The 
 ## What next?
 Congratulations, we now have a serviceable blog. As we let the dust settle, now we realize that we're lacking any means of navigation beyond scrolling through the latest set of articles on the main page. So we need some kind of index of all the posts in the blog. As seen, we can easily generate a list of files with `ls`, and we can exploit our datefull directory structure to easily split up posts by month, or even year.
 
-Also, a few of you may have noticed, this script isn't terribly portable. In particular, the way we use `stat(1)` to include the date in the posts only works on linux. Another problem that commonly crops up is the reliance on `/bin/bash` to create portable shell scripts. Smallblog was developed under pdksh, and executes under `/bin/sh`, so many of the common bash-isms that can creep into shell scripts have been avoided (you may notice the use of `expr` rather than `let` for the inline math.) We'll discuss this more in [part 2](#).
+Also, a few of you may have noticed, this script isn't terribly portable. In particular, the way we use `stat(1)` to include the date in the posts only works on linux. Another problem that commonly crops up is the reliance on `/bin/bash` to create portable shell scripts. Smallblog was developed under pdksh, and executes under `/bin/sh`, so many of the common bash-isms that can creep into shell scripts have been avoided (you may notice the use of `expr` rather than `let` for the inline math.) We'll discuss this more in [part 2](http://mnetic.ch/blog/2013/08/18/smallblog_howto_part_2.md.html).
