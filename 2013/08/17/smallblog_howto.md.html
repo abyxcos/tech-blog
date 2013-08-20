@@ -11,13 +11,13 @@
 			<div class="site">
 				<div class="header">
 					<h1 class="title"><a href="/blog">mnetic.ch/blog</a></h1>
+					<a class="extra" href="/blog/tags/">tags</a>
 					<a class="extra" href="/blog/archive.html">all posts</a>
 				</div>
-
 <h2 class="title"><a href='/blog/2013/08/17/smallblog_howto.md.html'>
 		How to create a static blog in shell (part 1)
 		</a></h2>
-		<p class="meta">Date: 2013-08-18 19:49:37 +0000</p>
+		<p class="meta">Date: 2013-08-20 22:50:11 +0000</p>
 		<div class="post">
 <p>This is a short description of the process I went about to create <a href="https://github.com/abyxcos/smallblog">smallblog</a>. If you&rsquo;re reading this, you&rsquo;ve most likely heard of <a href="http://jekyllrb.com/">jekyll</a>. If you haven&rsquo;t heard of jekyll, it&rsquo;s a small ruby script to create a static set of pages out of markdown files, and link them all together with a simple index. No server-side language, so it&rsquo;s both <a href="http://nginx.org/">nginx</a> friendly, and <a href="https://news.ycombinator.com/">Hacker News</a> friendly. No more worries about caching plugins, or if your database is optimized for traffic. And no chance of updates breaking your site. Of course the downside is you must regenerate your whole blog every time you update a post.</p>
 
@@ -52,10 +52,11 @@ done
 <p>Congratulations, we now have a serviceable blog. As we let the dust settle, now we realize that we&rsquo;re lacking any means of navigation beyond scrolling through the latest set of articles on the main page. So we need some kind of index of all the posts in the blog. As seen, we can easily generate a list of files with <code>ls</code>, and we can exploit our datefull directory structure to easily split up posts by month, or even year.</p>
 
 <p>Also, a few of you may have noticed, this script isn&rsquo;t terribly portable. In particular, the way we use <code>stat(1)</code> to include the date in the posts only works on linux. Another problem that commonly crops up is the reliance on <code>/bin/bash</code> to create portable shell scripts. Smallblog was developed under pdksh, and executes under <code>/bin/sh</code>, so many of the common bash-isms that can creep into shell scripts have been avoided (you may notice the use of <code>expr</code> rather than <code>let</code> for the inline math.) We&rsquo;ll discuss this more in <a href="http://mnetic.ch/blog/2013/08/18/smallblog_howto_part_2.md.html">part 2</a>.</p>
+
+<p>tags: smallblog shell bash</p>
 </div>
 
 			</div>
 		</div>
 	</body>
 </html>
-

@@ -27,3 +27,5 @@ Hardly the most pretty script, but it's starting to look quite like a blog. The 
 Congratulations, we now have a serviceable blog. As we let the dust settle, now we realize that we're lacking any means of navigation beyond scrolling through the latest set of articles on the main page. So we need some kind of index of all the posts in the blog. As seen, we can easily generate a list of files with `ls`, and we can exploit our datefull directory structure to easily split up posts by month, or even year.
 
 Also, a few of you may have noticed, this script isn't terribly portable. In particular, the way we use `stat(1)` to include the date in the posts only works on linux. Another problem that commonly crops up is the reliance on `/bin/bash` to create portable shell scripts. Smallblog was developed under pdksh, and executes under `/bin/sh`, so many of the common bash-isms that can creep into shell scripts have been avoided (you may notice the use of `expr` rather than `let` for the inline math.) We'll discuss this more in [part 2](http://mnetic.ch/blog/2013/08/18/smallblog_howto_part_2.md.html).
+
+tags: smallblog shell bash
