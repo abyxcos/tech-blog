@@ -1,10 +1,8 @@
-<?xml version="1.0" ?>
 <rss version="2.0">
 <channel>
-<title>How to create a static blog in shell (part 1)</title>
-<description>How to create a static blog in shell (part 1)</description>
+<title>blog</title>
+<description>blog</description>
 <link>http://mnetic.ch/blog</link>
-<lastBuildDate>Sat Jun 14 16:50:09 UTC 2014</lastBuildDate>
 <ttl>1800</ttl>
 <item>
 <title>
@@ -13,14 +11,10 @@ How to make your server happy while using rxvt
 <link>
 /blog/2014/06/14/rxvt_terminfo_on_smartos.md.html
 </link>
-<guid>
-/blog/2014/06/14/rxvt_terminfo_on_smartos.md.html
-</guid>
 <pubDate>
 2014-06-14 16:49:36 +0000
 </pubDate>
 <description>
-This is a post about How to create a static blog in shell (part 1)
 </description>
 </item>
 <item>
@@ -30,14 +24,10 @@ How to create a static blog in shell (part 2)
 <link>
 /blog/2013/08/18/smallblog_howto_part_2.md.html
 </link>
-<guid>
-/blog/2013/08/18/smallblog_howto_part_2.md.html
-</guid>
 <pubDate>
 2013-08-20 22:50:28 +0000
 </pubDate>
 <description>
-This is a post about How to create a static blog in shell (part 1)
 </description>
 </item>
 <item>
@@ -47,31 +37,10 @@ How to create a static blog in shell (part 1)
 <link>
 /blog/2013/08/17/smallblog_howto.md.html
 </link>
-<guid>
-/blog/2013/08/17/smallblog_howto.md.html
-</guid>
 <pubDate>
 2013-08-20 22:50:11 +0000
 </pubDate>
 <description>
-This is a post about How to create a static blog in shell (part 1)
-</description>
-</item>
-<item>
-<title>
-Welcome to the blog
-</title>
-<link>
-/blog/2013/08/16/welcome.md.html
-</link>
-<guid>
-/blog/2013/08/16/welcome.md.html
-</guid>
-<pubDate>
-2013-08-20 21:56:46 +0000
-</pubDate>
-<description>
-This is a post about How to create a static blog in shell (part 1)
 </description>
 </item>
 </channel>
