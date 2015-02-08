@@ -6,25 +6,25 @@
 <description>mnetic.ch/blog</description>
 
 <item>
+<title>Smallblog v0.2</title>
+<link>/blog/2015/02/08/smallblog_v0.2.md.html</link>
+<pubDate>2015/02/08</pubDate>
+<description>
+</description>
+</item>
+
+<item>
+<title>Smallblog v0.1</title>
+<link>/blog/2015/02/04/smallblog_v0.1.md.html</link>
+<pubDate>2015/02/04</pubDate>
+<description>
+</description>
+</item>
+
+<item>
 <title>How to make your server happy while using rxvt</title>
 <link>/blog/2014/06/14/rxvt_terminfo_on_smartos.md.html</link>
 <pubDate>2014/06/14</pubDate>
-<description>
-</description>
-</item>
-
-<item>
-<title>How to create a static blog in shell (part 2)</title>
-<link>/blog/2013/08/18/smallblog_howto_part_2.md.html</link>
-<pubDate>2013/08/18</pubDate>
-<description>
-</description>
-</item>
-
-<item>
-<title>How to create a static blog in shell (part 1)</title>
-<link>/blog/2013/08/17/smallblog_howto.md.html</link>
-<pubDate>2013/08/17</pubDate>
 <description>
 </description>
 </item>
