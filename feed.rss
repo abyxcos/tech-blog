@@ -1,47 +1,33 @@
+<?xml version="1.0"?>
 <rss version="2.0">
 <channel>
-<title>blog</title>
-<description>blog</description>
+<title>mnetic.ch/blog</title>
 <link>http://mnetic.ch/blog</link>
-<ttl>1800</ttl>
+<description>mnetic.ch/blog</description>
+
 <item>
-<title>
-How to make your server happy while using rxvt
-</title>
-<link>
-/blog/2014/06/14/rxvt_terminfo_on_smartos.md.html
-</link>
-<pubDate>
-2014-06-14 16:49:36 +0000
-</pubDate>
+<title>How to make your server happy while using rxvt</title>
+<link>/blog/2014/06/14/rxvt_terminfo_on_smartos.md.html</link>
+<pubDate>2014/06/14</pubDate>
 <description>
 </description>
 </item>
+
 <item>
-<title>
-How to create a static blog in shell (part 2)
-</title>
-<link>
-/blog/2013/08/18/smallblog_howto_part_2.md.html
-</link>
-<pubDate>
-2013-08-20 22:50:28 +0000
-</pubDate>
+<title>How to create a static blog in shell (part 2)</title>
+<link>/blog/2013/08/18/smallblog_howto_part_2.md.html</link>
+<pubDate>2013/08/18</pubDate>
 <description>
 </description>
 </item>
+
 <item>
-<title>
-How to create a static blog in shell (part 1)
-</title>
-<link>
-/blog/2013/08/17/smallblog_howto.md.html
-</link>
-<pubDate>
-2013-08-20 22:50:11 +0000
-</pubDate>
+<title>How to create a static blog in shell (part 1)</title>
+<link>/blog/2013/08/17/smallblog_howto.md.html</link>
+<pubDate>2013/08/17</pubDate>
 <description>
 </description>
 </item>
+
 </channel>
 </rss>
