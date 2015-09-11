@@ -1,0 +1,11 @@
+[% INCLUDE site_header.tmpl title=site.title %]
+
+[% FOREACH post=posts %]
+[% INCLUDE post.tmpl %]
+<br />
+
+[% END %]
+
+<h3><a class="extra" href="${site.prefix}/archive.html">all posts</a></h3>
+
+[% INCLUDE site_footer.tmpl %]

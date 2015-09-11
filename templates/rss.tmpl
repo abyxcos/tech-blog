@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<rss version="2.0" >
+<channel>
+<title>${site.title}</title>
+<link>${site.prefix}</link>
+<description>${site.title}</description>
+
+[% FOREACH post=posts %]
+<item>
+<title>${post.title}</title>
+<link>${site.prefix}/${post.path}</link>
+[% # FIXME: Hardcode a time and timezone into the pubDate %]
+[% # Use mtime (post.edit_date) over ctime (post.date) %]
+<pubDate>${post.edit_date}</pubDate>
+<description>
+tags: [% FOREACH tag=post.tags %]${tag} [% END %]
+</description>
+</item>
+
+[% END %]
+
+</channel>
+</rss>

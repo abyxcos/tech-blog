@@ -1,0 +1,13 @@
+<h1 class="title"><a href="${site.prefix}/${post.path}.html">${post.title}</a></h1>
+<p class="meta">Date: ${post.date}</p>
+<div class="post">
+${post.html}
+[% IF post.edit_date %]
+<p class="meta">Last edited: ${post.edit_date}</p>
+[% END %]
+<p class="meta">tags: 
+[% FOREACH tag=post.tags %]
+	<a class="meta" href="${site.prefix}/tags/${tag}.html">${tag}</a> 
+[% END %]
+</p>
+</div>

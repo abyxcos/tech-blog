@@ -1,0 +1,10 @@
+[% INCLUDE site_header.tmpl title=title %]
+
+<h1>${title}:</h1>
+<ul class="posts">
+[% FOREACH tag=site.tags %]
+	<li><a href="${site.prefix}/tags/${tag.key}.html">${tag.key}</a></li>
+[% END %]
+</ul>
+
+[% INCLUDE site_footer.tmpl %]

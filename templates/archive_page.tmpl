@@ -1,0 +1,16 @@
+[% INCLUDE site_header.tmpl title=title %]
+
+<h1>${title}:</h1>
+<ul class="posts">
+[% FOREACH post=posts %]
+	[% # Print a YYYY-MM heading at a month granularity %]
+	[% SET post.short_date = post.date.remove('-..$') %]
+	[% IF post.short_date != date %]
+		[% SET date = post.short_date %]
+		<h3>${date}</h3>
+	[% END %]
+	<li><span>${post.date}</span> &raquo; <a href="${site.prefix}/${post.path}.html">${post.title}</a></li>
+[% END %]
+</ul>
+
+[% INCLUDE site_footer.tmpl %]
