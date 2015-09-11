@@ -21,7 +21,9 @@ The `.` (single dot) built-in is a more portable version of the `source` built-i
 The RSS generation function was probably one of the worst sections of code I've written for smallblog. I'm a frequent user of RSS, but I've never had to write an RSS feed before. I know they're XML, but beyond that, nothing else. So the first thing I did was go to [wikipedia](https://en.wikipedia.org/wiki/RSS) and implement the format in the example section. The commit is [here](https://github.com/abyxcos/smallblog/commit/df944ab4d9518cc956748dd99a42155d3b6d3153#diff-65be323c984cb0bef3372e71fc23b2f2R120) if you wish to view the initial function I used. The structure of the function should be familiar by now. I `echo`ed a header, and then jumped straight into the `for` loop to generate an entry for each post. As I had no understanding of how RSS worked, or what it requires, I wrote a sequence of very strange code that was driven by trial and error. Each section was created by forcibly acquiring and molding the information I wanted into the RSS feed. This led to lines like the following
 
     echo "<pubDate>"
-    grep '<p class="meta">Date:' "${post}.html" | sed 's/^\s*<p class="meta">Date: //' | sed 's/<\/p>$//'
+    grep '<p class="meta">Date:' "${post}.html" |
+        sed 's/^\s*<p class="meta">Date: //' |
+        sed 's/<\/p>$//'
     echo "</pubDate>"
 
 which I used to pull the date from the html version of the post. The proper solution in this case would have been to just re-`stat(1)` the markdown file to grab the date, rather than attempting to use regexes on HTML, and hard-coding the format in more locations. As I was cleaning up the code for the [v0.2](http://mnetic.ch/blog/2015/02/08/smallblog_v0.2.md.html) release, this whole function got rewritten, rendering that previous line into something much simpler:
@@ -39,8 +41,10 @@ Ignoring my RSS feed generation function, the use of `stat(1)` as a crutch to gr
 
 In a stroke of genius, I remembered that I am already storing every post in a series of folders that gives the date I need. All I need to do is remove the filename from the `year/month/date/post_title.md`, and I have the same date string. The downside of this is that I lose the `%H:%M:%S %z` time and timezone from the posted line. Not perfect, but the solution reduces the complexity enough that I am willing to sacrifice the time display for it. I was able to rewrite my use of `stat(1)`
 
-    TIME_CMD="stat -c %y %FILE% | sed 's/\..* / /'" # Form: DATE TIME TIMEZONE
-    #TIME_CMD="stat -f \"%Y-%m-%d %H:%M:%S %z\" %FILE%" # BSD stat, command untested
+    TIME_CMD="stat -c %y %FILE% |
+        sed 's/\..* / /'"
+    #TIME_CMD="stat -f
+        \"%Y-%m-%d %H:%M:%S %z\" %FILE%"
 
     _time=`eval ${TIME_CMD/\%FILE\%/$1}`
 

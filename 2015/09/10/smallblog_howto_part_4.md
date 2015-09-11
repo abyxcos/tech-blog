@@ -28,7 +28,7 @@ Even for those not familiar with perl, this line may trigger some memories. It l
 All that perl snippet is doing is shelling out and using `ls(1)` to build an array of paths to posts. Why waste time digging through perl libraries when we can just ask the shell? Beats me. A proper perl implementation of this would still take just as many reads to the filesystem to build the list.
 
 ## Less stat more storage
-As `stat(2)` and `open(2)` was what I wanted to avoid, I wanted to avoid, I had to change from querying files every time I needed a single line to storing everything in a data structure and working against that. As it turns out, the access pattern for every function (except the main index page) is to read every file, process part of it, then pipe that output to disk in it's final form. By simply saving both the path and the file contents once, then acting on that, the filesystem access was reduced to a directory lookup and read for each file  (as opposed to a lookup and read on every file in each function.) The single exception, the main index page `index.html` only does this on the top few newest files (5 by default.) One loop with a maximum count, and there are now 10 less filesystem accesses.
+As `stat(2)` and `open(2)` was what I wanted to avoid, I had to change from querying files every time I needed a single line to storing everything in a data structure and working against that. As it turns out, the access pattern for every function (except the main index page) is to read every file, process part of it, then pipe that output to disk in it's final form. By simply saving both the path and the file contents once, then acting on that, the filesystem access was reduced to a directory lookup and read for each file  (as opposed to a lookup and read on every file in each function.) The single exception, the main index page `index.html` only does this on the top few newest files (5 by default.) One loop with a maximum count, and there are now 10 less filesystem accesses.
 
 It should be noted, this approach does incur a memory penalty, as now each post, it's path, and it's HTML version are now stored in memory. While the name *small*blog isn't meant to restrict this program's scope, I suspect most installations using this software will fit easily in RAM, even on smaller sized virtual servers. This is a trade-off, but I believe larger installations should make use of a proper database to allow more refined queries into the available data.
 
@@ -57,7 +57,14 @@ while the main index page can wrap the `[% INCLUDE post.tmpl %]` in a `foreach` 
     
     [% END %]
     
-    <h3><a class="extra" href="${site.prefix}/archive.html">all posts</a></h3>
+    <h3>
+    <a
+        class="extra"
+        href="${site.prefix}/archive.html"
+    >
+        all posts
+    </a>
+    </h3>
     
     [% INCLUDE site_footer.tmpl %]
 
